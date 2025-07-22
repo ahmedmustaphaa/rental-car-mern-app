@@ -11,7 +11,6 @@ function Managecar() {
 
   useEffect(() => {
     if (cars) {
-      // مجرد لودينج بسيط عشان نعطي إحساس تحميل
       setTimeout(() => setLoading(false), 800);
     }
   }, [cars]);
@@ -60,10 +59,9 @@ function Managecar() {
   };
 
   return (
-    <div className='bg-[#F1F5F9] h-[100vh]'>
-    <div className="p-6 ">
+    <div className="bg-[#F1F5F9] min-h-screen p-4 sm:p-6">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold text-gray-800 mb-1">Manage Cars</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-1">Manage Cars</h2>
         <p className="text-gray-500 text-sm">
           View, edit availability, or remove listed cars from the system.
         </p>
@@ -78,7 +76,7 @@ function Managecar() {
           No cars added yet.
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl shadow bg-white border">
+        <div className="overflow-x-auto rounded-xl shadow bg-white border hidden md:block">
           <table className="min-w-full text-sm">
             <thead className="bg-gray-50 text-xs text-gray-500 uppercase">
               <tr>
@@ -145,9 +143,65 @@ function Managecar() {
           </table>
         </div>
       )}
+
+      {/* Mobile Responsive Cards */}
+      {!loading && cars.length > 0 && (
+        <div className="md:hidden space-y-4">
+          {cars.map((car) => (
+            <div key={car._id} className="bg-white rounded-xl p-4 shadow border">
+              <div className="flex items-center gap-4 mb-4">
+                <img
+                  src={car.image}
+                  alt={`${car.brand} ${car.model}`}
+                  className="w-20 h-20 rounded-md object-cover"
+                />
+                <div>
+                  <div className="text-lg font-semibold text-gray-800">
+                    {car.brand} {car.model}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {car.seating_capacity} seats • {car.transmission}
+                  </div>
+                </div>
+              </div>
+              <div className="text-sm text-gray-700 mb-2">
+                <strong>Category:</strong> {car.category}
+              </div>
+              <div className="text-sm text-gray-700 mb-2">
+                <strong>Price:</strong> ${car.pricePerDay}/day
+              </div>
+              <div className="mb-3">
+                <span
+                  className={`text-xs font-medium px-2 py-1 rounded-full ${
+                    car.isAvailable
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-red-100 text-red-600'
+                  }`}
+                >
+                  {car.isAvailable ? 'Available' : 'Not Available'}
+                </span>
+              </div>
+              <div className="flex justify-end gap-4">
+                <button
+                  title="Toggle Availability"
+                  onClick={() => toggleAvailable(car._id)}
+                  className="text-purple-600 hover:text-purple-800 text-lg"
+                >
+                  <FaEye />
+                </button>
+                <button
+                  title="Delete Car"
+                  onClick={() => deleteCar(car._id)}
+                  className="text-red-500 hover:text-red-700 text-lg"
+                >
+                  <FaTrashAlt />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
-    </div>
-    
   );
 }
 

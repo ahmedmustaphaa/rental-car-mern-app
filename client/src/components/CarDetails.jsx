@@ -39,7 +39,7 @@ function CarDetails() {
       setError('');
 
       await axios.post(
-        'http://localhost:5000/api/booking/create',
+        'https://rental-car-mern-app.vercel.app/api/booking/create',
         {
           carId: CarDetails._id,
           pickupDate,
